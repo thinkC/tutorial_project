@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Memory Card Game</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/skeleton/2.0.4/skeleton.css">
+    <link href="https://fonts.googleapis.com/css?family=Amatic+SC" rel="stylesheet">
+    <style>
+    .imageTile{
+        display: inline;
+    }
+    #board{
+
+        width: 300px;
+        height: 200px;
+        margin: 0 auto;
+        
+    }
+    h1{
+        text-align: center;
+        font-family: 'Amatic SC', cursive;
+        color: #ffffff;
+    }
+    input{
+        margin-left: 750px;
+    }
+ 
+ #wrapper{
+     
+    height: 100vh;
+    background-color: 	#E94196;
+    background-repeat: repeat-x;
+    background-repeat: repeat-y;
+    position: relative;
+ }
+ #message{
+    text-align: center;
+    font-family: 'Amatic SC', cursive;
+    font-size: 30px;
+    color: #ffffff;
+ }
+ footer{
+     position: absolute;
+     left: 700px;
+     bottom: 100px;
+     font-family: 'Amatic SC', cursive;
+     color: #ffffff;
+     font-size: 30px;
+
+ }
+ p{
+    position: absolute;
+     left: 800px;
+     bottom: 50px;
+     font-family: 'Amatic SC', cursive;
+     color: #ffffff;
+     font-size: 20px;
+     padding-top: 70px;
+     
+ }
+
+ 
+    </style>
+</head>
+<body>
+    <div id="wrapper">
+    <h1>Memory Card Game</h1>
+    <div id="message"></div>
+    <input type="button" id="startButton" style="color:#ffffff" value="start game">
+    <div id="board"></div>
+    <footer>Designed & Created by Tunde Oyewo</footer>
+    <p>&copy; 2019</p>
+</div>
+    <script>
+    var startButton = document.getElementById('startButton');
+    var board = document.getElementById('board');
+    var message = document.getElementById('message');
+    startButton.addEventListener('click', startGame);
+    var timer;
+    var playLockout = false;
+    var imageArray = [];
+    var doubleCardArray = [];
+    var cardFlippedOver = [];
+    var images2 = ['angular.png','css.png','html.png','php.png','react.png','ruby.png'];
+    var newImage2 = images2.concat(images2);
+   
+    console.log(newImage2);
+    shuffleArray(newImage2);
+    console.log(newImage2);
+
+    var flip = -1;
+
+    function startGame(){
+        startButton.style.display = 'none';
+        //buildCard array
+        buildCardArray();
+        doubleCardArray = imageArray.concat(imageArray);
+        console.log(doubleCardArray);
+        buildCardImages(doubleCardArray);
+        
+
+        //shuffleCar array
+    }
+    console.log(doubleCardArray);
+    function buildCardArray(){
+        var images = ['js.png'];
+        
+        for(var i=0; i<6; i++){
+            imageArray.push(images[0])
+        }
+        console.log(imageArray);
+        
+    }
+
+    function buildCardImages(arr){
+        var html = '';
+        var x =0;
+        for(var i=0; i<arr.length; i++){
+            x++;
+            html += '<img id="card'+x+'" src="'+'./images/'+arr[i]+'" height="100px" width="100px" class="imageTile" onclick="pickCard(this,'+(x-1)+')" >';
+        }
+        board.innerHTML = html;
+    }
+
+    function pickCard(t,i){
+        console.log(event.target);
+        if(!playLockout && !isInArray(cardFlippedOver,t.id)){
+            if(flip >=0){
+            cardFlip(t,i);
+            playLockout = true;
+            if(checkSrc(cardFlippedOver[cardFlippedOver.length -1 ]) == checkSrc(cardFlippedOver[cardFlippedOver.length -2])){
+                message.innerHTML = 'Match is found';
+                gameOver();
+                console.log('Match is found');
+                playLockout = false;
+                flip = -1;
+            }else{
+                message.innerHTML = 'No Match';
+                console.log('No Match');
+                timer = setInterval(hideCard,1000);
+            }
+        }else{
+            flip = i;
+            cardFlip(t,i);
+        }
+        }else{
+            message.innerHTML = 'Lock out';
+        }
+      
+       
+        console.log(t.src);
+  
+    }
+
+    function cardFlip(t,i){
+        t.src = 'http://127.0.0.1:5500/images/'+newImage2[i];
+        console.log(t.src);
+        cardFlippedOver.push(t.id);
+        console.log(cardFlippedOver);
+        console.log(cardFlippedOver.length);
+    }
+
+       function shuffleArray(arr){
+        for(var i = arr.length -1; i >0; i--){
+            var radNum = Math.floor(Math.random() * (i+1));
+            var intitialValue = arr[i];
+            arr[i] = arr[radNum];
+            arr[radNum ] = intitialValue;
+        }
+        //console.log(arr);
+        return arr; 
+    }
+
+    function checkSrc(a){
+        var aa = document.getElementById(a).src;
+        console.log(a);
+        return aa;
+    }
+
+    function hideCard(){
+        for(var i=0; i<2; i++){
+            var nn = cardFlippedOver.pop();
+            console.log(nn);
+            //document.getElementById(nn).src = 'http://127.0.0.1:5500/'+images[0];
+            document.getElementById(nn).src = 'http://127.0.0.1:5500/images/js.png';
+        }
+        clearInterval(timer);
+        flip = -1;
+        playLockout = false;
+      
+    }
+
+    function isInArray(arr,v){
+        if(arr.indexOf(v) > -1){
+            return true
+        }
+    }
+
+    function gameOver(){
+        if(cardFlippedOver.length == newImage2.length){
+            message.innerHTML = 'Game Over';
+            startButton.style.display = 'block';
+            cardFlippedOver = [];
+            imageArray = [];
+            board.innerHTML = '';
+            
+        }
+    }
+    </script>
+</body>
+</html>
