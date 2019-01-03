@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/skeleton/2.0.4/skeleton.min.css">
+    <style>
+    h2{
+        text-align: center;
+        color: #fff;
+    }
+    #wrapper{
+        
+        width: 20%;
+        margin: 0 auto;
+    }
+    body{
+        background: #BF4F51;
+    }
+    #output2,#message,#message1{
+        color: #fff;
+        text-align: center;
+    }
+    </style>
+</head>
+<body>
+    <h2>Guess Code</h2>
+    <div id="wrapper">
+    <input type="text" id="c1" placeholder="enter code here"><br>
+    <input type="text" id="c2" placeholder="enter code here"><br>
+    <input type="text" id="c3" placeholder="enter code here"><br>
+    <input type="button" class="button-primary" value="guess code" onclick="guess();">
+</div>
+    <div id="output"></div>
+    <div id="output2"></div>
+    <div id="message"></div>
+    <div id="message1"></div>
+    <script>
+    var c1 = document.getElementById('c1');
+    var c2 = document.getElementById('c2');
+    var c3 = document.getElementById('c3');
+    var output = document.getElementById('output');
+    var output2 = document.getElementById('output2');
+    var message = document.getElementById('message');
+    var message1 = document.getElementById('message1');
+    var count = 0;
+    
+    window.onload = start;
+    var num1 = [];
+    
+    function start(){
+       for(var i=0; i<3; i++){
+           var radNum = Math.floor(Math.random() * 9);
+           console.log(radNum);
+           num1.push(radNum);
+       }
+       console.log(num1);
+         //output.innerHTML = num1.join(',');
+         //alert('Enter number guess code');
+    }
+
+function guess(){
+    
+    var res = [Number(c1.value),Number(c2.value),Number(c3.value)];
+    console.log(res);
+
+//check if number entered is NaN (is not a number)
+    if(res[0] !== res[0] || res[1] !== res[1] || res[2] !== res[2]){
+        message.innerHTML = "Type in a valid number ";
+        return false;
+    }
+        
+    // if(res[0] !== res[0] ){
+    //     document.getElementById('c1').style.color = 'red';
+    //     message.innerHTML = "Type in a valid number ";
+    //     return false;
+    // } if(res[1] !== res[1]){
+    //     document.getElementById('c2').style.color = 'red';
+    //     message.innerHTML = "Type in a valid number ";
+    //     return false;
+    // }if(res[2] !== res[2]){
+    //     document.getElementById('c3').style.color = 'red';
+    //     message.innerHTML = "Type in a valid number ";
+    //     return false;
+    // }
+    
+   
+    else if(count <4){
+        for(var i =0; i <num1.length; i++){
+        output2.innerHTML += compare(res[i],num1[i]);
+        
+    }
+    
+    
+    }else{
+        message.innerHTML = "Game Over , Secret code is "+ num1;
+    }
+    count++;
+    counter();
+    win(res,num1);
+    
+    console.log(count);
+}
+
+
+function compare(a,b){
+    if(a > b){
+        return 'L';
+    }
+    if(a < b){
+        return 'H';
+    }
+    if(a == b){
+        return a || b;
+    }
+    
+}
+
+function compare2(a,b){
+    if(a == b){
+        return true;
+    }
+}
+
+
+function win(arr1,arr2){
+    
+        if(arr1[0] === arr2[0] && arr1[1] === arr2[1]  && arr1[2] === arr2[2]){
+            message.innerHTML = 'Code Cracked '+ 'Secret code is '+ num1;
+            message1.innerHTML = '';
+            return true
+        }else{
+            return false
+        }
+    
+} 
+
+function counter(){
+    if(count <=3){
+        message1.innerHTML = 'Try '+(3 -count) +' more ' + 'times';
+        return true;
+    }else{
+        return false;
+    }
+   
+}
+
+    </script>
+</body>
+</html>
