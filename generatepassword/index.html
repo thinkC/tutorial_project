@@ -21,7 +21,7 @@
     </style>
 </head>
 <body>
-    <h1>Password Generator</h1>
+    <h1>Complex Password Generator</h1>
     <div id="wrapper">
     <form action="">
        Password Length <input type="text" id="passLength"><br>
@@ -51,14 +51,14 @@
     var finalPass = [];
 
     function genPass(){
+        //resetGenerator();
         passLength = Number(passLength.value);
         console.log(passLength);
         
         passLength = checkLengthAndDivide(passLength);
         console.log(passLength);
         
-        removeSpecial = removeSpecial.value;
-        console.log(removeSpecial);
+        
        //checkOnlyUpperOrLower();
         if(upper.checked === true && lower.checked === true){
             output2.innerHTML = 'only check either lower or upper';
@@ -145,10 +145,24 @@ function genRad(arr){
         console.log(passLength);
         //checkLengthAndDivide(passLength);
        
-        var specialArr = [':',';','<','>','?','"','&','!','@','#'];
+        var specialArr = [':',';','<','>','?','"','&','!','@','#','$','%','(','','=','_','-','*','^'];
+        removeSpecial = removeSpecial.value;
+        console.log(removeSpecial);
+        console.log(typeof(removeSpecial));
+       
+        //removes special character by filtering
+            for(var i=0; i<removeSpecial.length; i++){
+                specialArr = specialArr.filter(function(item) { 
+                return item !== removeSpecial[i];
+                })
+        console.log(specialArr)
+    
+}
+        console.log(specialArr)
        if(special.checked === true){
         //shuffle specialArr
             shuffleArray(specialArr);
+           console.log(specialArr)
             for(var i=0; i<passLength; i++){
                 var radSpec = Math.floor(Math.random()* specialArr.length);
                 var genSpec= specialArr[radSpec];
@@ -196,21 +210,6 @@ function checkNumOrSpecial(){
     
 }
 
-
-function removeSpecialValues(arr){
-//     if(removeSpecial.value != " "){
-//            specialArr.filter(removeSpecial.value);
-//           }
-    function rem(arr,str){
-        for(var i=0; i< str.length; i++){
-            if(arr.includes(str[i])){
-            
-           }
-        }
-        
-    }
-    
-}
 
     </script>
 </body>
